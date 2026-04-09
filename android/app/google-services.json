@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "521208399794",
+    "project_id": "notes-app-13c52",
+    "storage_bucket": "notes-app-13c52.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:521208399794:android:f363ae2112a7fed98c46ab",
+        "android_client_info": {
+          "package_name": "com.example.note_app_ikokas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAiVicwPir46v14Z-cOxNoBeWGpR3B6Mg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
