@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+
 import 'package:note_app_ikokas/model/note_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
