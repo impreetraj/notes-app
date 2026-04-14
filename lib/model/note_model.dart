@@ -18,10 +18,14 @@ class Note {
         'updatedAt': updatedAt,
       };
 
-  factory Note.fromMap(Map<String, dynamic> map) => Note(
-        id: map['id'],
-        title: map['title'],
-        content: map['content'],
-        updatedAt: map['updatedAt'],
-      );
+  factory Note.fromMap(Map<String, dynamic> map) {
+    
+
+    return Note(
+      id: map['id'] ?? '',
+      title: map['title'] ?? '',
+      content: map['content'] ?? '',
+      updatedAt: map['updatedAt'] ??'',
+    );
+  }
 }

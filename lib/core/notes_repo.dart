@@ -24,11 +24,26 @@ class NotesRepository {
     await firebase.delete(id);
   }
 
-  void sync() {
-    firebase.streamNotes().listen((notes) async {
-      for (var n in notes) {
+  Future<void> sync(Function onUpdate) async {
+    firebase.streamNotes().listen((firestoreNotes) async {
+      
+      final localNotes = await local.getNotes();
+      
+      
+      final firestoreIds = firestoreNotes.map((e) => e.id).toSet();
+      for (var localNote in localNotes) {
+        if (!firestoreIds.contains(localNote.id)) {
+          await local.delete(localNote.id);
+        }
+      }
+
+      
+      for (var n in firestoreNotes) {
         await local.insert(n);
       }
+
+      
+      onUpdate();
     });
   }
 }

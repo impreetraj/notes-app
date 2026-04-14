@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:note_app_ikokas/model/note_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -31,8 +32,13 @@ class LocalDbService {
 
   Future<void> insert(Note note) async {
     final database = await db;
-    await database.insert('notes', note.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    await database.insert(
+      'notes',
+      note.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+
+    print("data save in sqflite");
   }
 
   Future<List<Note>> getNotes() async {
@@ -45,4 +51,10 @@ class LocalDbService {
     final database = await db;
     await database.delete('notes', where: 'id=?', whereArgs: [id]);
   }
+
+  Future<void> deleteAll() async {
+    final database = await db;
+    await database.delete('notes');
+  }
 }
+

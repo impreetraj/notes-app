@@ -10,21 +10,32 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     on<LoadNotes>((event, emit) async {
       final notes = await repo.loadNotes();
       emit(NotesLoaded(notes));
-      repo.sync();
+      
+      
+      repo.sync(() {
+        if (!isClosed) add(RefreshNotes());
+      });
+    });
+
+    on<RefreshNotes>((event, emit) async {
+      final notes = await repo.loadNotes();
+      emit(NotesLoaded(notes));
     });
 
     on<AddNote>((event, emit) async {
       await repo.addNote(event.note);
-      add(LoadNotes());
+      add(RefreshNotes()); 
     });
+
     on<UpdateNote>((event, emit) async {
       await repo.addNote(event.note);
-      add(LoadNotes());
+      add(RefreshNotes());
     });
 
     on<DeleteNote>((event, emit) async {
       await repo.deleteNote(event.id);
-      add(LoadNotes());
+      add(RefreshNotes());
     });
+
   }
 }

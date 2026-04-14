@@ -17,3 +17,6 @@ class DeleteNote extends NotesEvent {
   final String id;
   DeleteNote(this.id);
 }
+
+class RefreshNotes extends NotesEvent {}
+

@@ -48,7 +48,7 @@ class Homepage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
 
-                          /// 🔹 HEADER
+                      
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                             decoration: BoxDecoration(
@@ -59,7 +59,7 @@ class Homepage extends StatelessWidget {
                             child: Row(
                               children: [
 
-                                /// ✅ Responsive title
+                          
                                 Expanded(
                                   child: Text(
                                     note.title.toUpperCase(),
@@ -72,7 +72,7 @@ class Homepage extends StatelessWidget {
                                   ),
                                 ),
 
-                                /// ✏️ Edit
+                             
                                 IconButton(
                                   icon: const Icon(Icons.edit, size: 20),
                                   onPressed: () {
@@ -88,7 +88,6 @@ class Homepage extends StatelessWidget {
                                   },
                                 ),
 
-                                /// 🗑 Delete
                                 IconButton(
                                   icon: const Icon(Icons.delete, size: 20),
                                   onPressed: () {
@@ -125,7 +124,7 @@ class Homepage extends StatelessWidget {
         },
       ),
 
-      /// ➕ ADD NOTE
+      
       floatingActionButton: FloatingActionButton(
         onPressed: () {
 
