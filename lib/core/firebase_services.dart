@@ -14,8 +14,8 @@ class FirebaseService {
     await ref.doc(id).delete();
   }
 
-  Stream<List<Note>> streamNotes() {
-    return ref.snapshots().map(
+  Stream<List<Note>> streamNotes(String userId) {
+    return ref.where('userId', isEqualTo: userId).snapshots().map(
       (snapshot) => snapshot.docs.map((e) => Note.fromMap(e.data())).toList(),
     );
   }

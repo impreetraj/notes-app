@@ -10,13 +10,13 @@ class NotesRepository {
 
   NotesRepository(this.firebase, this.local);
 
-  Future<List<Note>> loadNotes() async {
-    return await local.getNotes(); 
+  Future<List<Note>> loadNotes(String userId) async {
+    return await local.getNotes(userId); 
   }
 
   Future<void> addNote(Note note) async {
-    await local.insert(note);   //off
-    await firebase.add(note);   // on
+    await local.insert(note);   
+    await firebase.add(note);   
   }
 
   Future<void> deleteNote(String id) async {
@@ -24,10 +24,10 @@ class NotesRepository {
     await firebase.delete(id);
   }
 
-  Future<void> sync(Function onUpdate) async {
-    firebase.streamNotes().listen((firestoreNotes) async {
+  Future<void> sync(String userId, Function onUpdate) async {
+    firebase.streamNotes(userId).listen((firestoreNotes) async {
       
-      final localNotes = await local.getNotes();
+      final localNotes = await local.getNotes(userId);
       
       
       final firestoreIds = firestoreNotes.map((e) => e.id).toSet();

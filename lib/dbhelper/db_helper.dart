@@ -16,16 +16,22 @@ class LocalDbService {
 
     return openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: (db, _) async {
         await db.execute('''
           CREATE TABLE notes(
             id TEXT PRIMARY KEY,
+            userId TEXT,
             title TEXT,
             content TEXT,
             updatedAt INTEGER
           )
         ''');
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          await db.execute('ALTER TABLE notes ADD COLUMN userId TEXT');
+        }
       },
     );
   }
@@ -41,9 +47,13 @@ class LocalDbService {
     print("data save in sqflite");
   }
 
-  Future<List<Note>> getNotes() async {
+  Future<List<Note>> getNotes(String userId) async {
     final database = await db;
-    final result = await database.query('notes');
+    final result = await database.query(
+      'notes',
+      where: 'userId = ?',
+      whereArgs: [userId],
+    );
     return result.map((e) => Note.fromMap(e)).toList();
   }
 

@@ -12,7 +12,20 @@
           "package_name": "com.example.note_app_ikokas"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "521208399794-fsppgk5c0p2mqduq43q3pf6jcetrrdt0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.note_app_ikokas",
+            "certificate_hash": "98e20e29951fd5bfa0f8a538b61182d3fda42461"
+          }
+        },
+        {
+          "client_id": "521208399794-fm5q6dr3buapihtoipc1647802ha8u34.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCAiVicwPir46v14Z-cOxNoBeWGpR3B6Mg"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "521208399794-fm5q6dr3buapihtoipc1647802ha8u34.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

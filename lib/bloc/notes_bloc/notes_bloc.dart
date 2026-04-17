@@ -1,5 +1,5 @@
-import 'package:note_app_ikokas/bloc/notes_event.dart';
-import 'package:note_app_ikokas/bloc/notes_state.dart';
+import 'package:note_app_ikokas/bloc/notes_bloc/notes_event.dart';
+import 'package:note_app_ikokas/bloc/notes_bloc/notes_state.dart';
 import 'package:note_app_ikokas/core/notes_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,33 +8,33 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
 
   NotesBloc(this.repo) : super(NotesInitial()) {
     on<LoadNotes>((event, emit) async {
-      final notes = await repo.loadNotes();
+      final notes = await repo.loadNotes(event.userId);
       emit(NotesLoaded(notes));
       
       
-      repo.sync(() {
-        if (!isClosed) add(RefreshNotes());
+      repo.sync(event.userId, () {
+        if (!isClosed) add(RefreshNotes(event.userId));
       });
     });
 
     on<RefreshNotes>((event, emit) async {
-      final notes = await repo.loadNotes();
+      final notes = await repo.loadNotes(event.userId);
       emit(NotesLoaded(notes));
     });
 
     on<AddNote>((event, emit) async {
       await repo.addNote(event.note);
-      add(RefreshNotes()); 
+      add(RefreshNotes(event.note.userId)); 
     });
 
     on<UpdateNote>((event, emit) async {
       await repo.addNote(event.note);
-      add(RefreshNotes());
+      add(RefreshNotes(event.note.userId));
     });
 
     on<DeleteNote>((event, emit) async {
       await repo.deleteNote(event.id);
-      add(RefreshNotes());
+      add(RefreshNotes(event.userId));
     });
 
   }
