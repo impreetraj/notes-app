@@ -16,7 +16,7 @@ class LocalDbService {
 
     return openDatabase(
       path,
-      version: 2,
+      version: 4,
       onCreate: (db, _) async {
         await db.execute('''
           CREATE TABLE notes(
@@ -24,13 +24,29 @@ class LocalDbService {
             userId TEXT,
             title TEXT,
             content TEXT,
+            platform TEXT,
+            timeSlot TEXT,
+            scheduleDay TEXT,
             updatedAt INTEGER
           )
         ''');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion < 2) {
-          await db.execute('ALTER TABLE notes ADD COLUMN userId TEXT');
+        if (oldVersion < 3) {
+          try {
+            await db.execute('ALTER TABLE notes ADD COLUMN userId TEXT');
+          } catch (e) {
+            print("Migration v3: userId column error: $e");
+          }
+        }
+        if (oldVersion < 4) {
+          try {
+            await db.execute('ALTER TABLE notes ADD COLUMN platform TEXT DEFAULT "Google"');
+            await db.execute('ALTER TABLE notes ADD COLUMN timeSlot TEXT DEFAULT "09:00"');
+            await db.execute('ALTER TABLE notes ADD COLUMN scheduleDay TEXT DEFAULT "Today"');
+          } catch (e) {
+            print("Migration v4: new columns error: $e");
+          }
         }
       },
     );

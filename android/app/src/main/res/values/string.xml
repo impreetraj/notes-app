@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">note_app_ikokas</string>
+    <string name="facebook_app_id">2450325242061432</string>
+    <string name="fb_login_protocol_scheme">fb2450325242061432</string>
+    <string name="facebook_client_token">a31ac153cb7088cbfe9b7928b3680d42</string>
+
+
+</resources>

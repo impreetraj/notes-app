@@ -1,9 +1,10 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_app_ikokas/bloc/auth_bloc/auth_bloc.dart';
 import 'package:note_app_ikokas/bloc/auth_bloc/auth_event.dart';
 import 'package:note_app_ikokas/bloc/auth_bloc/auth_state.dart';
-import 'package:note_app_ikokas/pages/homepage.dart';
+// import 'package:note_app_ikokas/pages/homepage.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -31,12 +32,12 @@ class _SignupPageState extends State<SignupPage> {
         }
       },
       child: Scaffold(
-        backgroundColor: const Color(0xFFF8F9FA),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 20),
+            icon: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).colorScheme.onSurface, size: 20),
             onPressed: () => Navigator.pop(context),
           ),
         ),
@@ -47,9 +48,9 @@ class _SignupPageState extends State<SignupPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: 10),
-                const Text(
+                Text(
                   "Create Account",
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: Colors.black),
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: Theme.of(context).colorScheme.onSurface),
                   textAlign: TextAlign.left,
                 ),
                 const SizedBox(height: 10),
@@ -85,10 +86,11 @@ class _SignupPageState extends State<SignupPage> {
                 BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, state) {
                     if (state is AuthLoading) {
-                      return const Center(child: CircularProgressIndicator(color: Colors.black));
+                      return Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.onSurface));
                     }
                     return ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async{
+                        await FirebaseAnalytics.instance.logEvent(name: 'signup');
                         context.read<AuthBloc>().add(SignupRequested(
                           _nameController.text.trim(),
                           _emailController.text.trim(),
@@ -96,8 +98,8 @@ class _SignupPageState extends State<SignupPage> {
                         ));
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        foregroundColor: Colors.white,
+                        backgroundColor: Theme.of(context).colorScheme.onSurface,
+                        foregroundColor: Theme.of(context).scaffoldBackgroundColor,
                         padding: const EdgeInsets.symmetric(vertical: 18),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                         elevation: 0,
@@ -117,11 +119,11 @@ class _SignupPageState extends State<SignupPage> {
                     const Text("Already have an account? "),
                     GestureDetector(
                       onTap: () => Navigator.pop(context),
-                      child: const Text(
+                      child: Text(
                         "Login",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: Theme.of(context).colorScheme.onSurface,
                           decoration: TextDecoration.underline,
                         ),
                       ),
@@ -130,35 +132,7 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 const SizedBox(height: 30),
                 
-                const Row(
-                  children: [
-                    Expanded(child: Divider()),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text("OR", style: TextStyle(color: Colors.grey, fontSize: 12)),
-                    ),
-                    Expanded(child: Divider()),
-                  ],
-                ),
-                const SizedBox(height: 30),
-                
-                OutlinedButton.icon(
-                  onPressed: () {
-                    context.read<AuthBloc>().add(GoogleSignInRequested());
-                  },
-                  icon: const Icon(Icons.g_mobiledata_rounded, size: 30, color: Colors.blue),
-                  label: const Text(
-                    "Continue with Google",
-                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    side: const BorderSide(color: Color(0xFFEEEEEE)),
-                    backgroundColor: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 20),
+            
               ],
             ),
           ),
@@ -175,7 +149,7 @@ class _SignupPageState extends State<SignupPage> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(

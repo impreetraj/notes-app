@@ -1,7 +1,8 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+
 import 'package:note_app_ikokas/dbhelper/user_db_helper.dart';
 import 'package:note_app_ikokas/model/user_model.dart';
 
@@ -12,7 +13,9 @@ class AuthRepository {
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
 
   AuthRepository(this._userDb) {
-    _googleSignIn.initialize();
+    _googleSignIn.initialize(
+      serverClientId: '521208399794-fm5q6dr3buapihtoipc1647802ha8u34.apps.googleusercontent.com',
+    );
   }
 
   Stream<User?> get user => _auth.authStateChanges();
@@ -26,15 +29,22 @@ class AuthRepository {
   }
 
   Future<UserCredential> login(String email, String password) async {
-    return await _auth.signInWithEmailAndPassword(email: email, password: password);
+    return await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
   }
 
-  Future<UserCredential> signup(String name, String email, String password) async {
+  Future<UserCredential> signup(
+    String name,
+    String email,
+    String password,
+  ) async {
     UserCredential credential = await _auth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
-    
+
     final userData = {
       'name': name,
       'email': email,
@@ -42,7 +52,10 @@ class AuthRepository {
       'createdAt': DateTime.now().millisecondsSinceEpoch,
     };
 
-    await _firestore.collection('users').doc(credential.user!.uid).set(userData);
+    await _firestore
+        .collection('users')
+        .doc(credential.user!.uid)
+        .set(userData);
     await _userDb.saveUser(userData);
 
     return credential;
@@ -52,15 +65,17 @@ class AuthRepository {
     final GoogleSignInAccount? googleUser = await _googleSignIn.authenticate();
     if (googleUser == null) throw Exception("Sign in aborted by user");
 
-    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
     final AuthCredential credential = GoogleAuthProvider.credential(
       idToken: googleAuth.idToken,
     );
 
-    UserCredential userCredential = await _auth.signInWithCredential(credential);
+    UserCredential userCredential = await _auth.signInWithCredential(
+      credential,
+    );
     final user = userCredential.user!;
 
-    
     final userData = {
       'name': user.displayName ?? "No Name",
       'email': user.email ?? "",
@@ -77,5 +92,52 @@ class AuthRepository {
   Future<void> logout() async {
     await _googleSignIn.signOut();
     await _auth.signOut();
+  }
+
+  Future<UserCredential> signInWithMicrosoft() async {
+    final OAuthProvider provider = OAuthProvider("microsoft.com");
+  
+    
+    provider.setCustomParameters({
+      "tenant": "common",
+    });
+
+    final UserCredential userCredential = await _auth.signInWithProvider(provider);
+    final user = userCredential.user!;
+
+    final userData = {
+      'name': user.displayName ?? "No Name",
+      'email': user.email ?? "",
+      'uid': user.uid,
+      'createdAt': DateTime.now().millisecondsSinceEpoch,
+    };
+
+    await _firestore.collection('users').doc(user.uid).set(userData);
+    await _userDb.saveUser(userData);
+
+    return userCredential;
+  }
+  Future<UserCredential> signInWithFacebook() async {
+    final LoginResult result = await FacebookAuth.instance.login();
+    
+    if (result.status == LoginStatus.success) {
+      final AuthCredential credential = FacebookAuthProvider.credential(result.accessToken!.tokenString);
+      final UserCredential userCredential = await _auth.signInWithCredential(credential);
+      final user = userCredential.user!;
+
+      final userData = {
+        'name': user.displayName ?? "No Name",
+        'email': user.email ?? "",
+        'uid': user.uid,
+        'createdAt': DateTime.now().millisecondsSinceEpoch,
+      };
+
+      await _firestore.collection('users').doc(user.uid).set(userData);
+      await _userDb.saveUser(userData);
+
+      return userCredential;
+    } else {
+      throw Exception(result.message ?? "Facebook login failed");
+    }
   }
 }
