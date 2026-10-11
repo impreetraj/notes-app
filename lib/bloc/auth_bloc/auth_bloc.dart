@@ -90,15 +90,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     });
 
-    on<FacebookSignInRequested>((event, emit) async {
-      emit(AuthLoading());
-      try {
-        await authRepo.signInWithFacebook();
-      } catch (e, stack) {
-        FirebaseCrashlytics.instance.recordError(e, stack, reason: 'Facebook sign-in failed');
-        emit(AuthError(e.toString()));
-      }
-    });
+    // on<FacebookSignInRequested>((event, emit) async {
+    //   emit(AuthLoading());
+    //   try {
+    //     await authRepo.signInWithFacebook();
+    //   } catch (e, stack) {
+    //     FirebaseCrashlytics.instance.recordError(e, stack, reason: 'Facebook sign-in failed');
+    //     emit(AuthError(e.toString()));
+    //   }
+    // });
 
     on<LogoutRequested>((event, emit) async {
       await authRepo.logout();

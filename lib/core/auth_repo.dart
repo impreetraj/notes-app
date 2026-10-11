@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 import 'package:note_app_ikokas/dbhelper/user_db_helper.dart';
 import 'package:note_app_ikokas/model/user_model.dart';
@@ -117,27 +117,27 @@ class AuthRepository {
 
     return userCredential;
   }
-  Future<UserCredential> signInWithFacebook() async {
-    final LoginResult result = await FacebookAuth.instance.login();
-    
-    if (result.status == LoginStatus.success) {
-      final AuthCredential credential = FacebookAuthProvider.credential(result.accessToken!.tokenString);
-      final UserCredential userCredential = await _auth.signInWithCredential(credential);
-      final user = userCredential.user!;
-
-      final userData = {
-        'name': user.displayName ?? "No Name",
-        'email': user.email ?? "",
-        'uid': user.uid,
-        'createdAt': DateTime.now().millisecondsSinceEpoch,
-      };
-
-      await _firestore.collection('users').doc(user.uid).set(userData);
-      await _userDb.saveUser(userData);
-
-      return userCredential;
-    } else {
-      throw Exception(result.message ?? "Facebook login failed");
-    }
-  }
+  // Future<UserCredential> signInWithFacebook() async {
+  //   final LoginResult result = await FacebookAuth.instance.login();
+  //   
+  //   if (result.status == LoginStatus.success) {
+  //     final AuthCredential credential = FacebookAuthProvider.credential(result.accessToken!.tokenString);
+  //     final UserCredential userCredential = await _auth.signInWithCredential(credential);
+  //     final user = userCredential.user!;
+  //
+  //     final userData = {
+  //       'name': user.displayName ?? "No Name",
+  //       'email': user.email ?? "",
+  //       'uid': user.uid,
+  //       'createdAt': DateTime.now().millisecondsSinceEpoch,
+  //     };
+  //
+  //     await _firestore.collection('users').doc(user.uid).set(userData);
+  //     await _userDb.saveUser(userData);
+  //
+  //     return userCredential;
+  //   } else {
+  //     throw Exception(result.message ?? "Facebook login failed");
+  //   }
+  // }
 }

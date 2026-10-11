@@ -177,6 +177,24 @@ class _LoginPageState extends State<LoginPage> {
                             backgroundColor: Theme.of(context).cardColor,
                           ),
                         ),
+                        // const SizedBox(height: 15),
+                        // OutlinedButton.icon(
+                        //   onPressed: () async{
+                        //     await FirebaseAnalytics.instance.logLogin(loginMethod: 'facebook');
+                        //     context.read<AuthBloc>().add(FacebookSignInRequested());
+                        //   },
+                        //   icon: const Icon(Icons.window_rounded, size: 24, color: Colors.blue),
+                        //   label: Text(
+                        //     "Continue with Facebbok",
+                        //     style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontWeight: FontWeight.bold),
+                        //   ),
+                        //   style: OutlinedButton.styleFrom(
+                        //     padding: const EdgeInsets.symmetric(vertical: 12),
+                        //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        //     side: BorderSide(color: Theme.of(context).dividerColor),
+                        //     backgroundColor: Theme.of(context).cardColor,
+                        //   ),
+                        // ),
 
                       ],
                     ),
